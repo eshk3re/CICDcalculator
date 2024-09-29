@@ -11,30 +11,30 @@ services:
       GITLAB_OMNIBUS_CONFIG: |  
         external_url 'https://gitlab.example.com'  
     ports:  
-      - '80:80'
-      - '443:443'
-      - '22:22'
-    volumes:
-      - '/srv/gitlab/config:/etc/gitlab'
-      - '/srv/gitlab/logs:/var/log/gitlab'
-      - '/srv/gitlab/data:/var/opt/gitlab'
-    shm_size: '256m'
-    networks:
-      - gitlab_net
+      - '80:80'  
+      - '443:443'  
+      - '22:22'  
+    volumes:  
+      - '/srv/gitlab/config:/etc/gitlab'  
+      - '/srv/gitlab/logs:/var/log/gitlab'  
+      - '/srv/gitlab/data:/var/opt/gitlab'  
+    shm_size: '256m'  
+    networks:  
+      - gitlab_net  
 
-  gitlab-runner:
-    image: gitlab/gitlab-runner:alpine
-    container_name: gitlab-runner
-    restart: unless-stopped
-    depends_on:
-      - gitlab
-    volumes:
-      - /srv/gitlab-runner:/etc/gitlab-runner
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - gitlab_net
-
-networks:
-  gitlab_net:
-    driver: bridge
-`
+  gitlab-runner:  
+    image: gitlab/gitlab-runner:alpine  
+    container_name: gitlab-runner  
+    restart: unless-stopped  
+    depends_on:  
+      - gitlab  
+    volumes:  
+      - /srv/gitlab-runner:/etc/gitlab-runner  
+      - /var/run/docker.sock:/var/run/docker.sock  
+    networks:  
+      - gitlab_net  
+  
+networks:  
+  gitlab_net:  
+    driver: bridge  
+`  
