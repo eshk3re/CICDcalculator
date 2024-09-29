@@ -38,3 +38,9 @@ networks:
   gitlab_net:
     driver: bridge
 ```  
+  
+Запускаем контейнеры командой **docker compose up -d**
+
+URL для перехода в gitlab через браузер: https://<ip-адрес машины>
+![image](https://github.com/user-attachments/assets/d69e09a7-4965-42a8-aa84-f91b32e371b5)
+
