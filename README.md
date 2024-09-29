@@ -1,16 +1,16 @@
-Создаём docker-compose.yml для запуска контейнеров с gitlab и gitlab-runner:
-`
-version: '2.6'
-services:
-  gitlab:
-    image: gitlab/gitlab-ce:16.10.0-ce.0
-    container_name: gitlab
-    restart: always
-    hostname: 'gitlab.example.com'
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url 'https://gitlab.example.com'
-    ports:
+Создаём docker-compose.yml для запуска контейнеров с gitlab и gitlab-runner:  
+`  
+version: '2.6'  
+services:  
+  gitlab:  
+    image: gitlab/gitlab-ce:16.10.0-ce.0  
+    container_name: gitlab  
+    restart: always  
+    hostname: 'gitlab.example.com'  
+    environment:  
+      GITLAB_OMNIBUS_CONFIG: |  
+        external_url 'https://gitlab.example.com'  
+    ports:  
       - '80:80'
       - '443:443'
       - '22:22'
