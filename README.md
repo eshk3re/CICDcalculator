@@ -73,4 +73,5 @@ Token раннера необходимо создать в проекте -> Se
 ![image](https://github.com/user-attachments/assets/ccf9291c-b64c-41c1-a0b5-74f96013a1b7)
   
 Gitlab и gitlab-runner должны находится в одной сети.
-
+  
+** Далее пишем API-калькулятор на python с Flask, файл с зависимостями requirements.txt для работы калькулятора и Dockerfile для сборки калькулятора **
