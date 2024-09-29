@@ -44,3 +44,9 @@ networks:
 URL для перехода в gitlab через браузер: https://<ip-адрес машины>
 ![image](https://github.com/user-attachments/assets/d69e09a7-4965-42a8-aa84-f91b32e371b5)
 
+Чтобы сбросить пароль рута и установить новый нужно выполнить следующие команды:
+```
+docker exec -it gitlab /bin/bash
+cd /etc/gitlab
+gitlab-rake "gitlab:password:reset[root]"
+```
