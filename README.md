@@ -1,4 +1,4 @@
-##Развертывание gitlab
+## Развертывание gitlab
 Создаём docker-compose.yml для запуска контейнеров с gitlab и gitlab-runner:  
 ```yaml  
 version: '2.6'
