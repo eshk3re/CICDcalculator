@@ -68,6 +68,8 @@ openssl x509 -req -extfile <(printf "subjectAltName=DNS:example.com,DNS:www.exam
 docker exec -it gitlab-runner /bin/bash
 gitlab-runner register --url "https://gitlab.example.com" --tls-ca-file=/etc/gitlab-runner/ca.crt --registration-token "<token>" --description "docker-runner" --maintenance-note "Free-form maintainer notes about this runner" --run-untagged="true" --locked="false" --access-level="not_protected"
 ```
-Token раннера необходимо создать в проекте -> Settings -> CI/CD -> Runners -> New project runner  
+Token раннера необходимо создать в проекте -> Settings -> CI/CD -> Runners -> New project runner
+![image](https://github.com/user-attachments/assets/ccf9291c-b64c-41c1-a0b5-74f96013a1b7)
+  
 Gitlab и gitlab-runner должны находится в одной сети.
 
