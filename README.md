@@ -52,3 +52,21 @@ gitlab-rake "gitlab:password:reset[root]"
 ```
 Заходим в `Admin area`, оттуда в `Users`, создадим пользователя с именем. Заходим в этого же пользователя, меняем пароль. После входа тоже потребуется смена.  
 Создаем группу, в которой создаем репозиторий.
+  
+Создаем ключи и серты в директории /srv/gitlab/config/ssl для корректной работы раннера
+```
+openssl genrsa -out ca.key 2048
+openssl req -new -x509 -days 3654 -key ca.key -subj "/C=CN/ST=GD/L=SZ/O=Acme, Inc./CN=Acme Root CA" -out ca.crt
+openssl req -newkey rsa:2048 -nodes -keyout gitlab.example.com.key -subj "/C=CN/ST=GD/L=SZ/O=Acme, Inc./CN=*.example.com" -out gitlab.example.com.csr
+openssl x509 -req -extfile <(printf "subjectAltName=DNS:example.com,DNS:www.example.com,DNS:gitlab.example.com") -days 365 -in gitlab.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out gitlab.example.com.crt
+```
+Подкладываем в /srv/gitlab-runner ca.crt.
+  
+Регистрируем раннер:
+```
+docker exec -it gitlab-runner /bin/bash
+gitlab-runner register --url "https://gitlab.example.com" --tls-ca-file=/etc/gitlab-runner/ca.crt --registration-token "<token>" --description "docker-runner" --maintenance-note "Free-form maintainer notes about this runner" --run-untagged="true" --locked="false" --access-level="not_protected"
+```
+Token раннера необходимо создать в проекте -> Settings -> CI/CD -> Runners -> New project runner  
+Gitlab и gitlab-runner должны находится в одной сети.
+
