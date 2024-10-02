@@ -6,9 +6,11 @@
 Напишем Dockerfile для сборки и запуска контейнера с калькулятором, где используется базовый образ python, устанавливаются зависимости и запускается calc.py  
 Для начала соберем и запустим контейнер локально  
 Сборка:  
-![image](https://github.com/user-attachments/assets/a68c33f0-c040-4d3f-8ced-5ef1978b8ee8)
-Запуск контейнера  
-![image](https://github.com/user-attachments/assets/31aff332-3413-4f7f-96cc-fa08a36d32da)
+![image](https://github.com/user-attachments/assets/a68c33f0-c040-4d3f-8ced-5ef1978b8ee8)  
+Запуск контейнера:  
+![image](https://github.com/user-attachments/assets/c632a6f5-0390-4caa-a5c0-ff90351d065c)  
+Проверка работы курлами:  
+![image](https://github.com/user-attachments/assets/137d7c18-298e-4870-9ddf-08dd8321df93)  
 
 ## Развертывание gitlab  
 Для непрерывной интеграции нам понадобится gitlab.  
