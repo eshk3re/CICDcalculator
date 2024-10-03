@@ -104,6 +104,8 @@ Gitlab и gitlab-runner должны находится в одной сети.
 Сохраненные артефакты после сканирования:  
 ![image](https://github.com/user-attachments/assets/6dd37a78-25e0-4eb9-a13b-829b562e0f0b)  
 
+Разбор отчетов:  
+
 
 
 
