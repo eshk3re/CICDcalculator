@@ -1,71 +1,70 @@
 stages:
   - build
+  - scan
   - deploy
-  - test
-  - security-scan
-
-variables:
-  DOCKER_DRIVER: overlay2
-  IMAGE_NAME: $CI_REGISTRY_IMAGE/my-fastapi-calculator:$CI_COMMIT_REF_SLUG
 
 
-build:
+build_image:
   stage: build
-  image: docker:20.10.16
+  image: docker:27
   services:
-    - docker:20.10.16-dind
+    - name: docker:27-dind
+      alias: docker
   script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker build -t $IMAGE_NAME .
-    - docker push $IMAGE_NAME
-  only:
-    - main
+    - echo "$DOCKER_HUB_PASSWD" | docker login -u $DOCKER_HUB_LOGIN --password-stdin
+    - docker build -t $IMAGE .
+    - docker push $IMAGE
 
-
-deploy:
-  stage: deploy
-  image: docker:20.10.16
-  services:
-    - docker:20.10.16-dind
+trivy_scan:
+  stage: scan
+  image: 
+    name: aquasec/trivy:0.56.0
+    entrypoint: [""]
   script:
-    - apk add curl
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - docker pull $IMAGE_NAME
-    - docker run -d -p 8000:8000 --name calculator $IMAGE_NAME
-    - sleep 10
-    - curl -L http://docker:8000/
-    - curl -L "http://docker:8000/add?a=1&b=2"
-    - curl -L "http://docker:8000/divide?a=1&b=0"
-  only:
-    - main
-
-
-security_scan_trivy:
-  stage: security-scan
-  image: docker:20.10.16-dind
-  services:
-    - docker:20.10.16-dind
-  script:
-    - apk add --no-cache curl  
-    - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh  
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    - ./bin/trivy image --format json --output trivy_report.json $IMAGE_NAME
+    - trivy image --image-config-scanners misconfig,secret --format json -o trivy-report.json $IMAGE
   artifacts:
     paths:
-      - trivy_report.json
-    when: always
-  only:
-    - main
+      - trivy-report.json
 
-
-security_scan_semgrep:
-  stage: security-scan
+semgrep_scan:
+  stage: scan
   image: returntocorp/semgrep:latest
   script:
-    - semgrep --config auto --json --output semgrep_report.json $CI_PROJECT_DIR
+    - ls $CI_PROJECT_DIR
+    - semgrep --config auto --json --output semgrep-report.json $CI_PROJECT_DIR
   artifacts:
     paths:
-      - semgrep_report.json
-    when: always
-  only:
-    - main
+      - semgrep-report.json
+
+bandit_scan:
+  stage: scan
+  image: python:3.9
+  before_script:
+    - pip install bandit
+  script:
+    - bandit -r calc.py -f json -o bandit-report.json || true
+    - cat bandit-report.json
+  artifacts:
+    paths:
+      - bandit-report.json
+
+deploy&test:
+  stage: deploy
+  image: docker:27
+  services:
+    - name: $IMAGE
+      alias: calculator
+  script:
+    - apk add curl
+    - |
+        curl -X POST http://calculator:5000/calculate \
+          -H "Content-Type: application/json" \
+          -d '{"a": 10, "b": 7, "operator": "*"}'
+    - |
+        curl -X POST http://calculator:5000/calculate \
+          -H "Content-Type: application/json" \
+          -d '{"a": 10, "b": 0, "operator": "/"}'
+    - |
+        curl -X POST http://calculator:5000/calculate \
+          -H "Content-Type: application/json" \
+          -d '{"a": 10, "b": 7, "operator": "e"}'
