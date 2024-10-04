@@ -101,10 +101,11 @@ Gitlab и gitlab-runner должны находится в одной сети.
 Вывод с последней джобы:  
 ![image](https://github.com/user-attachments/assets/1346b841-06d7-45b7-b7eb-61803072028a)  
 
-Сохраненные артефакты после сканирования:  
+Сохраненные артефакты после сканирования (находятся в папке scan-reports):  
 ![image](https://github.com/user-attachments/assets/6dd37a78-25e0-4eb9-a13b-829b562e0f0b)  
 
-Разбор отчетов:  
+## Разбор отчетов  
+bandit
 
 
 
